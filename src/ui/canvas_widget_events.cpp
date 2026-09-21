@@ -262,7 +262,11 @@ bool CanvasWidget::event(QEvent* event) {
       return true;
     }
   }
+#ifdef PATCHY_GPU_CANVAS
+  return QOpenGLWidget::event(event);
+#else
   return QWidget::event(event);
+#endif
 }
 
 void CanvasWidget::wheelEvent(QWheelEvent* event) {
@@ -319,7 +323,11 @@ void CanvasWidget::wheelEvent(QWheelEvent* event) {
 }
 
 void CanvasWidget::resizeEvent(QResizeEvent* event) {
+#ifdef PATCHY_GPU_CANVAS
+  QOpenGLWidget::resizeEvent(event);
+#else
   QWidget::resizeEvent(event);
+#endif
   if (isVisible() && constrain_pan()) {
     update();
     notify_view_changed();

@@ -306,7 +306,7 @@ Important Photoshop features that are not supported yet, or are only partially s
 - Layer comps, timeline/video/animation workflows, generative tools
 - Photoshop's own automation surfaces: Actions (.atn), UXP/JSX panels, and scripts written for Photoshop (Patchy has its own JavaScript scripting and batch processing instead, see above)
 - High-fidelity PSD/PSB edge cases, including layered PSB writing and byte-perfect preservation of every Photoshop-only metadata block
-- Patchy is slower than Photoshop, especially on large documents and it doesn't support any GPU acceleration. (Like, layer styles being done in pixel shaders, etc)  However, being CPU only helps with porting, consistent output, and stability so kind of a trade-off that makes sense, for now.  That said, certain operations have been optimized for multicore - canvas compositing and image flattening are multithreaded, splitting large images (4 Mpx+) into strips rendered on all CPU cores.
+- Patchy is slower than Photoshop, especially on large documents. The default build keeps CPU-authoritative document compositing, PSD output, and compatibility tests for portability and deterministic output. Desktop developers can opt into the optional GPU presentation and document-compositing tiers with `-DPATCHY_ENABLE_GPU_CANVAS=ON` and `-DPATCHY_ENABLE_WEBGPU=ON`; unsupported features and export remain on the CPU with atomic fallback. See [GPU canvas presentation](docs/gpu-canvas.md).
 
 ### Affinity import
 
