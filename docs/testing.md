@@ -176,6 +176,7 @@ Useful diagnostic variables:
 - `PATCHY_RENDER_SINGLE_THREADED=1` forces byte-stable sequential rendering.
 - `PATCHY_RENDER_THREADS=<n>` caps every parallel fan-out at n workers in place of the hardware thread count (perf harness emulation of a low-core machine; the transform proxy gate scales with it).
 - `PATCHY_PROCESSING_OVERLAY_MIN_PIXELS` overrides the processing-overlay threshold.
+- `PATCHY_RENDER_BACKEND=auto|cpu|opengl|vulkan|metal|d3d11|d3d12` selects the Qt Quick/RHI presentation preference; `PATCHY_GPU_CANVAS=auto|cpu` remains an alias.
 - `PATCHY_NO_SOUND=1` suppresses script audio; offscreen suites rely on it.
 - `PATCHY_SETTINGS_DIR=<dir>` redirects the app's ini settings store (automation isolation).
 - `PATCHY_RECOVERY_DIR=<dir>` redirects the automatic document recovery store (the UI suite sets it to `test-artifacts/recovery`); `PATCHY_RECOVERY_INTERVAL_MS=<ms>` overrides the recovery timer interval. See [document-recovery.md](document-recovery.md).
