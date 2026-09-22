@@ -38,13 +38,7 @@
 #include <QRegion>
 #include <QSize>
 #include <QString>
-<<<<<<< HEAD
 #include <QStringList>
-#ifdef PATCHY_GPU_CANVAS
-#include <QOpenGLWidget>
-#endif
-=======
->>>>>>> 15954a60 (Add automatic GPU canvas backend fallback)
 #include <QWidget>
 
 #include <array>
