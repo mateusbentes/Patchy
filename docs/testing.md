@@ -169,6 +169,7 @@ Never use Computer Use, desktop automation, or input injection for native QA wit
 Useful diagnostic variables:
 
 - `PATCHY_NO_SINGLE_INSTANCE=1` allows multiple instances.
+- `patchy_core_tests` also validates the hardware-agnostic GPU foundation: dirty-region coalescing, tile invalidation by mip, deterministic render-graph ordering, cycle and multiple-writer rejection, and fake-backend device-loss recovery. These tests do not open a window, download Dawn, or require a graphics adapter; see [Hardware-agnostic GPU render graph](gpu-render-graph.md).
 - `PATCHY_FAKE_SCANNER_FILE=<path>` bypasses native scanner acquisition in tests.
 - `PATCHY_REV_TRACE=1` logs revision bumps.
 - `PATCHY_ZOOM_TRACE=1` logs paint and zoom phases over 2 ms.
