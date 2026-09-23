@@ -429,6 +429,10 @@ public:
   [[nodiscard]] bool pointer_gesture_active() const noexcept;
   [[nodiscard]] double zoom() const noexcept;
   void set_zoom(double zoom);
+  // Restores a view after transient UI chrome changes size. Unlike interactive
+  // panning, this intentionally does not constrain or recenter the saved pan.
+  [[nodiscard]] QPointF view_pan() const noexcept;
+  void set_view_pan(QPointF pan);
   // Absolute zoom anchored at the viewport center, Photoshop-style: the anchor
   // is clamped to the document bounds (so a view left off-center never pins
   // grey margin), then per axis the document is centered when it fits the
@@ -2122,6 +2126,7 @@ private:
   Document* document_{nullptr};
   double zoom_{1.0};
   QPointF pan_{40.0, 40.0};
+  bool has_completed_initial_show_{false};
   bool wheel_zooms_{true};
   QScrollBar* horizontal_scroll_bar_{nullptr};
   QScrollBar* vertical_scroll_bar_{nullptr};
