@@ -53,6 +53,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QFontMetrics>
+#include <QFontInfo>
 #include <QDockWidget>
 #include <QElapsedTimer>
 #include <QEventLoop>
@@ -1187,9 +1188,18 @@ void ui_script_text_box_wraps_and_aligns() {
 void ui_script_set_text_runs_edits_existing_layer() {
   patchy::ui::MainWindow window;
   show_window(window);
+  // Use the concrete family Qt resolves for the application font. This avoids platform aliases
+  // such as Arial/Sans Serif that the text renderer may normalize to another installed family.
+  const auto family = QFontInfo(QApplication::font()).family();
+  CHECK(!family.isEmpty());
+  if (family.isEmpty()) {
+    return;
+  }
+  const auto json_family =
+      QString::fromUtf8(QJsonDocument(QJsonArray{family}).toJson(QJsonDocument::Compact));
   CHECK(run_script(window, QStringLiteral(R"JS(
     var doc = app.activeDocument;
-    var layer = doc.addTextLayer('Ask Seth for a game', {font: 'Arial', size: 24, x: 10, y: 40, color: '#102030'});
+    var layer = doc.addTextLayer('Ask Seth for a game', {font: %1, size: 24, x: 10, y: 40, color: '#102030'});
     var plainWidth = layer.bounds.width;
     layer.setTextRuns([{text: 'Ask '}, {text: 'Seth', bold: true, color: '#ff0000'}, ' for a game']);
     var runs = layer.textRuns;
@@ -1203,10 +1213,12 @@ void ui_script_set_text_runs_edits_existing_layer() {
     var threw = false;
     try { layer.setTextRuns([]); } catch (e) { threw = true; }
     console.log('empty-throws=' + threw);
-  )JS")));
+  )JS")
+                             .arg(json_family)));
   CHECK(backlog_contains(window, QStringLiteral("text=Ask Seth for a game")));
   CHECK(backlog_contains(window, QStringLiteral("count=3")));
-  CHECK(backlog_contains(window, QStringLiteral("kept=Arial|24|#102030|false")));
+  CHECK(backlog_contains(window, QStringLiteral("kept=") + family +
+                              QStringLiteral("|24|#102030|false")));
   CHECK(backlog_contains(window, QStringLiteral("bolded=Seth|true|#ff0000")));
   CHECK(backlog_contains(window, QStringLiteral("wider=true")));
   CHECK(backlog_contains(window, QStringLiteral("back=1|false")));
