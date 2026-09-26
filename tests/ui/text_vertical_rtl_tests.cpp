@@ -891,7 +891,16 @@ void ui_new_text_starts_horizontal_after_vertical_layer() {
   CHECK(vertical_layer != nullptr && layer_is_vertical_metadata(*vertical_layer));
   // Deselect so the next click starts a NEW layer; the toggle reads horizontal and the new
   // session is horizontal even though the previous layer was vertical.
+  // Clear both the document active layer and the layer-panel selection. The options bar now
+  // mirrors selected text layers even when no active layer is set.
+  auto* layer_list = window.findChild<QListWidget*>(QStringLiteral("layerList"));
+  CHECK(layer_list != nullptr);
+  if (layer_list == nullptr) {
+    return;
+  }
+  layer_list->clearSelection();
   live_document.clear_active_layer();
+  QApplication::processEvents();
   require_action_by_text(window, QStringLiteral("Type"))->trigger();
   QApplication::processEvents();
   CHECK(!toggle->isChecked());
